@@ -1,0 +1,4 @@
+.env
+<lab1env>/
+/.pyc
+**/pycache
