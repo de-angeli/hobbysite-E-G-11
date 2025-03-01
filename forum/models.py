@@ -7,7 +7,15 @@ class PostCategory(models.Model):
     description = models.TextField()
 
     class Meta:
+        verbose_name = "Post Category"
+        verbose_name_plural = "Post Categories"
         ordering = ["name"]
+
+    def get_absolute_url(self):
+        return reverse('forum:post-detail', args=[self.pk])
+
+    def __str__(self):
+        return self.name
 
 class Post(models.Model):
     title = models.CharField(max_length=255)
