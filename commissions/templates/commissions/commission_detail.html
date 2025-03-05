@@ -2,8 +2,9 @@
 
 {% load static %}
 
-{% block title %}<h1>{{ commission.title }}</h1>{% endblock %}
+{% block title %}Commission Detail{% endblock %}
 {% block content %}
+    <h1>{{ commission.title }}</h1>
     <p>{{ commission.description }}</p>
     <ul>
         <li>People required: {{ commission.people_required }}</li>
@@ -12,8 +13,8 @@
     </ul>
     <p>Comments:</p>
     <ul>
-        {% for comment in commission.comments.all %}
-        <li>Comment - {{ comment.created_on }}: {{ comment.entry }}</li>
+        {% for comment in commission.comment.all %}
+        <li>{{ comment.created_on }}: {{ comment.entry }}</li>
         {% endfor %}
     </ul>
 {% endblock %}
