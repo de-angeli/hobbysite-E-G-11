@@ -5,6 +5,7 @@ from .models import PostCategory, Post
 class PostInLine(admin.TabularInline):
     model = Post
 
+
 class PostCategoryAdmin(admin.ModelAdmin):
     model = PostCategory
     inlines = [PostInLine,]

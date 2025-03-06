@@ -1,11 +1,12 @@
 from django.contrib import admin
 from .models import Product, ProductType
 
+
 class ProductTypeAdmin(admin.ModelAdmin):
     model = ProductType
     list_display = ('name', 'description')
     search_fields = ('name',)
-    extra = 1
+
 
 class ProductAdmin(admin.ModelAdmin):
     model = Product
