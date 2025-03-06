@@ -15,7 +15,8 @@ class ProductType(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    product_type = models.ForeignKey(ProductType, 
+    product_type = models.ForeignKey(
+        ProductType, 
         on_delete=models.SET_NULL, 
         null=True,
         related_name='item_list'

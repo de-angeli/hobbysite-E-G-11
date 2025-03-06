@@ -23,4 +23,4 @@ def item_list(request):
 
 def item_detail(request, pk):
     ctx = { "item": Product.objects.get(pk=pk) }
-    return render(request, 'merchstore/item_detail.html',ctx)
+    return render(request, 'merchstore/item_detail.html', ctx)

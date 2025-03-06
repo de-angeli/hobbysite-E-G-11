@@ -24,7 +24,7 @@ class Comment(models.Model):
         Commission,
         on_delete=models.CASCADE,
         null=True,
-        related_name="comment"
+        related_name='comment'
     )
     entry = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
