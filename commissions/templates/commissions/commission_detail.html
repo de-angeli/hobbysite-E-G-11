@@ -2,18 +2,18 @@
 
 {% load static %}
 
-{% block title %}Commission Detail{% endblock %}
+{% block title %} {{ object.title }} {% endblock %}
 {% block content %}
-    <h1>{{ commission.title }}</h1>
-    <p>{{ commission.description }}</p>
+    <h1>{{ object.title }}</h1>
+    <p>{{ object.description }}</p>
     <ul>
-        <li>People required: {{ commission.people_required }}</li>
-        <li>Created On: {{ commission.created_on }}</li>
-        <li>Updated On: {{ commission.updated_on }}</li>
+        <li>People required: {{ object.people_required }}</li>
+        <li>Created On: {{ object.created_on }}</li>
+        <li>Updated On: {{ object.updated_on }}</li>
     </ul>
     <p>Comments:</p>
     <ul>
-        {% for comment in commission.comment.all %}
+        {% for comment in object.comment.all %}
         <li>{{ comment.created_on }}: {{ comment.entry }}</li>
         {% endfor %}
     </ul>

@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
+
 class Commission(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -16,6 +17,7 @@ class Commission(models.Model):
     
     def __str__(self):
         return self.title
+
 
 class Comment(models.Model):
     commission = models.ForeignKey(

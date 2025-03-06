@@ -18,9 +18,9 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('', include('forum.urls', namespace="forum")),
-    path('', include('commissions.urls', namespace="commissions")),
-    path('admin/', admin.site.urls),
+    path('forum/', include('forum.urls', namespace="forum")),
+    path('commission/', include('commissions.urls', namespace="commissions")),
     path('merchstore/', include('merchstore.urls', namespace="merchstore")),
+    path('admin/', admin.site.urls),
     path('blog/', include('blog.urls')),  
 ]
