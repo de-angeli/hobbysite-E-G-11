@@ -11,11 +11,9 @@ class PostCategory(models.Model):
         verbose_name_plural = "Post Categories"
         ordering = ["name"]
 
-    def get_absolute_url(self):
-        return reverse('forum:post-detail', args=[self.pk])
-
     def __str__(self):
         return self.name
+
 
 class Post(models.Model):
     title = models.CharField(max_length=255)
@@ -31,3 +29,9 @@ class Post(models.Model):
 
     class Meta:
         ordering = ["-created_on"]
+    
+    def get_absolute_url(self):
+        return reverse('forum:thread-detail', args=[self.pk])
+
+    def __str__(self):
+        return self.title

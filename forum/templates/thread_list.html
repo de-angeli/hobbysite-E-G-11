@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Thread List{% endblock %}
+{% block content %}
+    {% for category in object_list %}
+        <h2>{{ category.name }}</h2>
+        <ul>
+            {% for thread in category.posts.all %}
+            <li>
+                <a href="{{ thread.get_absolute_url }}">
+                    {{ thread.title }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% endblock %}
