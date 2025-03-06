@@ -29,7 +29,7 @@ class Article(models.Model):
         ordering = ['-created_on']  
 
     def get_absolute_url(self):
-        return reverse('article:article-detail', args=[self.pk])
+        return reverse('blog:article-detail', args=[self.pk])
 
     def __str__(self):
         return self.title  
