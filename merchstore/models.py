@@ -7,6 +7,8 @@ class ProductType(models.Model):
     description = models.TextField() 
 
     class Meta: #ProductTypes should be sorted by name in ascending order
+        verbose_name = "Product Type"
+        verbose_name_plural = "Product Types"
         ordering = ['name']
 
     def __str__(self): #returns string representation of model instance

@@ -14,9 +14,3 @@ class PostCategoryAdmin(admin.ModelAdmin):
     list_filter = ("name",)
 
 admin.site.register(PostCategory, PostCategoryAdmin)
-
-@admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
-    search_fields = ("title",)
-    list_display = ("title", "category", "created_on")
-    list_filter = ("category", "created_on")

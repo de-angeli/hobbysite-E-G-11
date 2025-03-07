@@ -7,6 +7,8 @@ class ArticleCategory(models.Model):
     description = models.TextField()
 
     class Meta:
+        verbose_name = "Article Category"
+        verbose_name_plural = "Article Categories"
         ordering = ['name'] 
 
     def __str__(self):
