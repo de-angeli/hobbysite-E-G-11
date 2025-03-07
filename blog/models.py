@@ -9,10 +9,10 @@ class ArticleCategory(models.Model):
     class Meta:
         verbose_name = "Article Category"
         verbose_name_plural = "Article Categories"
-        ordering = ['name'] 
+        ordering = ['name']
 
     def __str__(self):
-        return self.name 
+        return self.name
 
 
 class Article(models.Model):
@@ -28,10 +28,10 @@ class Article(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_on']  
+        ordering = ['-created_on']
 
     def get_absolute_url(self):
         return reverse('blog:article-detail', args=[self.pk])
 
     def __str__(self):
-        return self.title  
+        return self.title
