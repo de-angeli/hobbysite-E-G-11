@@ -4,9 +4,11 @@ from django.views.generic.detail import DetailView
 
 from .models import Article
 
+
 class ArticleListView(ListView):
     model = Article
-    template_name = "wiki/article_list.html"  
+    template_name = "wiki/article_list.html"
+
 
 class ArticleDetailView(DetailView):
     model = Article
