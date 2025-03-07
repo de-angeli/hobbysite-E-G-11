@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Wiki Articles{% endblock %}
+
+{% block content %}
+    <h1>Wiki Articles</h1>
+    <ul>
+    {% for article in object_list %}
+        <li>
+            <a href="{% url 'wiki:article-detail' article.id %}">{{ article.title }}</a>
+            <p>Category: {{ article.category.name }}</p>  
+            <p>Created on: {{ article.created_on }}</p>
+        </li>
+    {% empty %}
+        <p>No articles found.</p>
+    {% endfor %}
+    </ul>
+{% endblock %}
