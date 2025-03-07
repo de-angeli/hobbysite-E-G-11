@@ -1,4 +1,4 @@
 .env
 <midtermenv>/
-/.pyc
-/pycache/*
+*/*.pyc
+**/__pycache__
