@@ -7,4 +7,4 @@ class Profile(models.Model):
     email = models.EmailField()
 
     def __str__(self):
-        return self.display_name
+        return self.display_name or self.user.username
