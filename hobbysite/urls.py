@@ -16,12 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic import TemplateView
+from django.contrib.auth import views as auth_views
+from user_management import views as user_views
 
 urlpatterns = [
+    path('', TemplateView.as_view(template_name='homepage.html'), name='home'),
     path('forum/', include('forum.urls', namespace="forum")),
     path('commissions/', include('commissions.urls', namespace="commissions")),
     path('merchstore/', include('merchstore.urls', namespace="merchstore")),
     path('blog/', include('blog.urls', namespace="blog")),
     path('wiki/', include('wiki.urls', namespace="wiki")),
+    path('profile/', include('user_management.urls', namespace="user_management")),
     path('admin/', admin.site.urls),
+    path('', include('django.contrib.auth.urls')),
+    path('register/', user_views.register_view, name='register'),
+    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
