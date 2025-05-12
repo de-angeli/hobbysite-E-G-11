@@ -1,19 +1,38 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block title %}Item List{% endblock %}
+
 {% block content %}
-    <h1>Merchandise Store</h1>
+<h1>Merchandise Store</h1>
+
+{% if user_products %}
+    <h2>Your Products</h2>
     <ul>
-        {% for item in object_list %}
+    {% for item in user_products %}
         <li>
             [{{ item.product_type }}]
             <a href="{{ item.get_absolute_url }}">
                 {{ item.name }} 
             </a>
-
         </li>
-        {% endfor %}
+    {% endfor %}
     </ul>
+{% else %}
+    <p>You have no products listed.</p>
+{% endif %}
+
+<h2>All Other Products</h2>
+<ul>
+{% for item in all_products %}
+    <li>
+        [{{ item.product_type }}]
+        <a href="{{ item.get_absolute_url }}">
+            {{ item.name }} 
+        </a>
+    </li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'merchstore:item-add' %}">+ Add New Product</a>
 {% endblock %}
