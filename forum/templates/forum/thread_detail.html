@@ -10,6 +10,10 @@
     <p><strong>Updated On:</strong> {{ object.updated_on }}</p>
     <p>{{ object.entry }}</p>
 
+    {% if object.image %}
+        <img src="{{ object.image.url }}" alt="Thread Image">
+    {% endif %}
+
     <h2>Comments</h2>
     <ul>
         {% for comment in comments %}
@@ -42,5 +46,9 @@
         {% endfor %}
     </ul>
 
-        <a href="{% url 'forum:thread-list' %}">Back to Posts</a>
+    {% if user.is_authenticated and object.author == user.profile %}
+        <a href="{% url 'forum:thread-update' object.pk %}">Edit Thread</a>
+    {% endif %}
+
+    <a href="{% url 'forum:thread-list' %}">Back to Posts</a>
 {% endblock %}

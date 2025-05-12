@@ -5,10 +5,12 @@
 {% block title %}Update Thread{% endblock %}
 {% block content %}
   <h2>Edit Thread</h2>
-  <form method="post">
+
+  <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Update</button>
+    <button type="submit">Update Thread</button>
   </form>
+
   <a href="{% url 'forum:thread-detail' object.pk %}">Cancel</a>
 {% endblock %}
