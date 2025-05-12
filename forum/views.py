@@ -75,6 +75,7 @@ class ThreadCreateView(LoginRequiredMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
+        form = ThreadForm(request.POST, request.FILES)
         if form.is_valid():
             thread = form.save(commit=False)
             thread.author = self.request.user.profile
@@ -95,9 +96,17 @@ class ThreadUpdateView(LoginRequiredMixin, UpdateView):
     def get_queryset(self):
         return Thread.objects.filter(author=self.request.user.profile)
     
-    def form_valid(self, form):
-        form.instance.author = self.request.user.profile
-        return super().form_valid(form)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.form_class(request.POST, request.FILES, instance=self.object)
+
+        if form.is_valid():
+            thread = form.save(commit=False)
+            thread.author = self.request.user.profile
+            thread.save()
+            return redirect(self.get_success_url())
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
         return reverse('forum:thread-detail', kwargs={'pk': self.object.pk})
