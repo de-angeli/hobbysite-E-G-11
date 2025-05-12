@@ -5,7 +5,24 @@
 {% block title %} {{ object.name }} {% endblock %}
 {% block content %} 
     <h1>Merchandise Store</h1>
-    <h2>{{ object.name }}</h2>
+    <h2>{{ object.name }} by {{object.owner}}</h2>
     <p>{{ object.description }}</p>
     <p>Php {{ object.price }}</p>
+    <p>{{ object.status }}</p>
+    <p>In Stock: {{ object.stock }}</p>
+
+    {% if request.user.is_authenticated and object in user_products %}
+        <a href="{% url 'merchstore:item-edit' object.pk %}">+ Edit Product</a>
+    {% else %}
+        {% if object.stock > 0 %}
+        <h2>Buy Now!</h2>
+        <form method="POST" enctype="multipart/form-data"> 
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">Submit!</button>
+        </form>
+        {% else %}
+        <h2>Item out of stock. Please check in in a later time</h2>
+        {% endif %}
+    {% endif %}
 {% endblock %}
