@@ -1,12 +1,8 @@
 from django.shortcuts import render, redirect, reverse
-from django.shortcuts import render, redirect, reverse
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Product, ProductType, Transaction
-from .forms import ProductForm, TransactionForm
 from .models import Product, ProductType, Transaction
 from .forms import ProductForm, TransactionForm
 
@@ -45,46 +41,6 @@ class CartListView(LoginRequiredMixin, ListView):
         context['user_cart_products'] = user_cart_products
         return context
 
-
-class TransactionListView(LoginRequiredMixin, ListView):
-    model = Transaction
-    template_name = 'merchstore/transactions.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        profile = self.request.user.profile
-        transactions = Transaction.objects.filter(product__owner=profile).select_related('buyer__user', 'product').order_by('buyer__user__username', 'created_on')
-        context['transactions'] = transactions
-        return context
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        if self.request.user.is_authenticated:
-            profile = self.request.user.profile
-            user_products = Product.objects.filter(owner=profile)
-            other_products = Product.objects.exclude(owner=profile)
-        else:
-            user_products = Product.objects.none()
-            other_products = Product.objects.all()
-
-        context['user_products'] = user_products
-        context['all_products'] = other_products
-        return context
-    
-class CartListView(LoginRequiredMixin, ListView):
-    model = Transaction
-    template_name = 'merchstore/cart_list.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        profile = self.request.user.profile
-        user_cart_products = Transaction.objects.filter(buyer=profile).select_related('product__owner__user').order_by('product__owner__user__username', 'created_on')
-
-        context['user_cart_products'] = user_cart_products
-        return context
         
 class TransactionListView(LoginRequiredMixin, ListView):
     model = Transaction
@@ -97,6 +53,7 @@ class TransactionListView(LoginRequiredMixin, ListView):
         transactions = Transaction.objects.filter(product__owner=profile).select_related('buyer__user', 'product').order_by('buyer__user__username', 'created_on')
         context['transactions'] = transactions
         return context
+
 
 class ItemDetailView(DetailView):
     model = Product
@@ -114,7 +71,7 @@ class ItemDetailView(DetailView):
         return context
     
     def post(self, request, *args, **kwargs):
-        product = self.get_object()  # Get current product
+        product = self.get_object()
         form = TransactionForm(request.POST, request.FILES)
 
         if not request.user.is_authenticated:
