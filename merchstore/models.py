@@ -2,7 +2,6 @@ from django.db import models
 from django.urls import reverse
 from user_management.models import Profile
 
-from user_management.models import Profile
 
 class ProductType(models.Model):
     name = models.CharField(max_length=255)
