@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import User
+from user_management.models import Profile
 
 
 class Commission(models.Model):
@@ -11,9 +11,15 @@ class Commission(models.Model):
         ("Discontinued", "Discontinued"),
     )
     title = models.CharField(max_length=255)
+    author = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     description = models.TextField()
     status = models.CharField(
-        max_length=12,
+        max_length=20,
         choices=STATUS_CHOICES,
         default='Open'
     )
@@ -39,18 +45,21 @@ class Job(models.Model):
         Commission,
         on_delete=models.CASCADE,
         null=True,
-        related_name='job'
+        related_name='jobs'
     )
-    role = models.TextField()
-    manpower_required = models.IntegerField()
+    role = models.CharField(max_length=255)
+    manpower_required = models.PositiveIntegerField()
     status = models.CharField(
-        max_length=4,
+        max_length=20,
         choices=STATUS_CHOICES,
         default='Open'
     )
 
     class Meta:
         ordering = ['status', '-manpower_required', 'role']
+
+    def __str__(self):
+        return self.role
 
     
 class JobApplication(models.Model):
@@ -63,16 +72,16 @@ class JobApplication(models.Model):
         Job,
         on_delete=models.CASCADE,
         null=True,
-        related_name="application"
+        related_name="applications"
     )
     applicant = models.ForeignKey(
-        User,
+        Profile,
         on_delete=models.CASCADE,
         null=True,
         blank=True
     )
     status = models.CharField(
-        max_length=9,
+        max_length=20,
         choices=STATUS_CHOICES,
         default='Pending'
     )
@@ -80,3 +89,6 @@ class JobApplication(models.Model):
 
     class Meta:
         ordering = ['status', '-applied_on']
+
+    def __str__(self):
+        return f"{self.applicant} applied to {self.job}"

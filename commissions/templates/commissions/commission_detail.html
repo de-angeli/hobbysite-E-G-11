@@ -6,15 +6,36 @@
 {% block content %}
     <h1>{{ object.title }}</h1>
     <p>{{ object.description }}</p>
+    <p>Status: {{ object.status }}</p>
+    <p>Created on: {{ object.created_on }}</p>
+    <p>Updated on: {{ object.updated_on }}</p>
+    
+    <h2>Jobs</h2>
+    <p>Total Manpower required: {{ total_manpower }}</p>
+    <p>Open Manpower: {{ open_manpower }}</p>
     <ul>
-        <li>People required: {{ object.people_required }}</li>
-        <li>Created On: {{ object.created_on }}</li>
-        <li>Updated On: {{ object.updated_on }}</li>
-    </ul>
-    <p>Comments:</p>
-    <ul>
-        {% for comment in object.comment.all %}
-        <li>{{ comment.created_on }}: {{ comment.entry }}</li>
+        {% for item in job_info %}
+            <li>
+                <strong>{{ item.job.role }}</strong> ({{ item.job.status }})<br>
+                Required: {{ item.job.manpower_required }}, Open Slots: {{ item.available_slots }}
+                {% if item.own_commission %}
+                    <p>You cannot apply to your own commission</p>
+                {% elif item.can_apply %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="hidden" name="job" value="{{ item.job.id }}">
+                        <button type="submit">Apply to Job</button>
+                    </form>
+                {% elif user.is_authenticated %}
+                    <p>Job is full</p>    
+                {% endif %}
+            </li>
         {% endfor %}
     </ul>
+
+    {% if object.author == user.profile %}
+        <a href="{% url 'commissions:commission-update' object.pk %}">Edit Commission</a>
+    {% endif %}
+    <a href="{% url 'commissions:commission-list' %}">Back to list</a>
 {% endblock %}
