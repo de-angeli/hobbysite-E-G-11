@@ -15,14 +15,14 @@
         <a href="{% url 'merchstore:item-edit' object.pk %}">+ Edit Product</a>
     {% else %}
         {% if object.stock > 0 %}
-        <h2>Buy Now!</h2>
-        <form method="POST" enctype="multipart/form-data"> 
-            {% csrf_token %}
-            {{ form }}
-            <button type="submit">Submit!</button>
-        </form>
+            <h2>Buy Now!</h2>
+            <form method="POST" enctype="multipart/form-data"> 
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit">Submit!</button>
+            </form>
         {% else %}
-        <h2>Item out of stock. Please check in in a later time</h2>
+            <h2>Item out of stock. Please check in in a later time</h2>
         {% endif %}
     {% endif %}
 {% endblock %}
