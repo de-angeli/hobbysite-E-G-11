@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Transaction List{% endblock %}
+{% block content %}
+<h1>Your Transaction List</h1>
+
+    {% if transactions %}
+        <ul>
+        {% for item in transactions %}
+            {% ifchanged item.buyer %}
+                <h2>Buyer: {{ item.buyer }}</h2>
+            {% endifchanged %}
+            <li>
+                {{ item.amount }} x {{ item.product.name }} ({{ item.product.product_type }}) ordered on {{ item.created_on }} || Status: {{item.status}}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no products listed.</p>
+    {% endif %}
+{% endblock %}

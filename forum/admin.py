@@ -1,16 +1,16 @@
 from django.contrib import admin
-from .models import PostCategory, Post
+from .models import ThreadCategory, Thread
 
 
 class PostInLine(admin.TabularInline):
-    model = Post
+    model = Thread
 
 
 class PostCategoryAdmin(admin.ModelAdmin):
-    model = PostCategory
+    model = ThreadCategory
     inlines = [PostInLine,]
     search_fields = ("name",)
     list_display = ("name",)
     list_filter = ("name",)
 
-admin.site.register(PostCategory, PostCategoryAdmin)
+admin.site.register(ThreadCategory, PostCategoryAdmin)

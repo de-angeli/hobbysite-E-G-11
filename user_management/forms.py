@@ -5,4 +5,4 @@ from .models import Profile
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['display_name', 'email']
+        fields = ['display_name']

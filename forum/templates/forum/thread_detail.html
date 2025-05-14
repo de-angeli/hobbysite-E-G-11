@@ -10,5 +10,45 @@
     <p><strong>Updated On:</strong> {{ object.updated_on }}</p>
     <p>{{ object.entry }}</p>
 
+    {% if object.image %}
+        <img src="{{ object.image.url }}" alt="Thread Image">
+    {% endif %}
+
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in comments %}
+            <li><strong>{{ comment.author }}</strong>: {{ comment.entry }} ({{ comment.created_on }})</li>
+        {% empty %}
+            <li>No comments yet.</li>
+        {% endfor %}
+    </ul>
+
+    {% if user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Add Comment</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to add a comment.</p>
+    {% endif %}
+
+    {% if user.is_authenticated and object.author == user %}
+        <a href="{% url 'thread_update' object.pk %}">Edit Thread</a>
+    {% endif %}
+
+    <h3>Related Threads</h3>
+    <ul>
+        {% for post in related_posts %}
+            <li><a href="{% url 'forum:thread-detail' post.pk %}">{{ post.title }}</a></li>
+        {% empty %}
+            <li>No related threads found.</li>
+        {% endfor %}
+    </ul>
+
+    {% if user.is_authenticated and object.author == user.profile %}
+        <a href="{% url 'forum:thread-update' object.pk %}">Edit Thread</a>
+    {% endif %}
+
     <a href="{% url 'forum:thread-list' %}">Back to Posts</a>
 {% endblock %}

@@ -16,19 +16,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf import settings
+from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from user_management import views as user_views
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='homepage.html'), name='home'),
+
     path('forum/', include('forum.urls', namespace="forum")),
     path('commissions/', include('commissions.urls', namespace="commissions")),
     path('merchstore/', include('merchstore.urls', namespace="merchstore")),
     path('blog/', include('blog.urls', namespace="blog")),
     path('wiki/', include('wiki.urls', namespace="wiki")),
+
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
     path('profile/', include('user_management.urls', namespace="user_management")),
-    path('admin/', admin.site.urls),
-    path('', include('django.contrib.auth.urls')),
-    path('register/', user_views.register_view, name='register'),
+
+    path('admin/', admin.site.urls)
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
