@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Update Blog Article{% endblock %}
+{% block content %}
+    <h1>Update Blog Article</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+
+    <a href="{% url 'blog:article-detail' object.pk %}">Cancel</a>
+{% endblock %}

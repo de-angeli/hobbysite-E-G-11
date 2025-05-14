@@ -1,15 +1,57 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
-{% block title %} {{ object.title }} {% endblock %}
+{% block title %}{{ object.title }}{% endblock %}
 
 {% block content %}
     <h1>{{ object.title }}</h1>
+    <img src="{{ object.header_image.url }}" alt="Header Image" style="max-width:100%;">
     <p>Category: {{ object.category }}</p>
     <p>Created On: {{ object.created_on }}</p>
     <p>Last Updated On: {{ object.updated_on }}</p>
     <p>{{ object.entry }}</p>
 
-    <a href="{% url 'blog:article-list' %}">Back to Articles</a>
+    {% if request.user.is_authenticated and request.user.profile == object.author %}
+        <a href="{% url 'blog:article-update' object.id %}">Edit Article</a>
+    {% endif %}
+
+    {% if gallery_images %}
+        <h2>Gallery</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            {% for img in gallery_images %}
+                <div style="width: 200px;">
+                    <img src="{{ img.image.url }}" alt="{{ img.caption }}" style="width: 100%;">
+                    {% if img.caption %}
+                        <p style="text-align: center;">{{ img.caption }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <h2>Related Articles by {{ object.author }}</h2>
+    <ul>
+        {% for related in related_articles %}
+        <li><a href="{{ related.get_absolute_url }}">{{ related.title }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <h2>Comments</h2>
+    {% if user.is_authenticated %}
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}  {# use 'comment_form' not 'form' #}
+        <button type="submit">Post Comment</button>
+    </form>    
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to comment.</p>
+    {% endif %}
+
+    <ul>
+        {% for comment in comments %}
+        <li><strong>{{ comment.author }}</strong>: {{ comment.entry }} ({{ comment.created_on }})</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'blog:article-list' %}">Back to Article List</a>
 {% endblock %}

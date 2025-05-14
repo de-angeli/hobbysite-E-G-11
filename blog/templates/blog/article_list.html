@@ -2,19 +2,33 @@
 
 {% load static %}
 
-{% block title %}Article List{% endblock %}
+{% block title %}Articles{% endblock %}
 
 {% block content %}
-    <h1>Articles</h1>
+    <h1>Your Articles</h1>
     <ul>
-        {% for article in object_list %}
+        {% for article in user_articles %}
         <li>
-            <a href="{{ article.get_absolute_url }}">
-                {{ article.title }} 
-            </a>
-            <p>Category: {{ article.category }}</p>
-            <p>Created on: {{ article.created_on }}</p>
+            <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
         </li>
+        {% empty %}
+        <li>No articles authored by you yet.</li>
         {% endfor %}
     </ul>
+
+    <h2>All Other Articles (Grouped by Category)</h2>
+    {% if other_articles %}
+        {% for category, articles in other_articles.items %}
+            <h3>{{ category.name }}</h3>
+            <ul>
+                {% for article in articles %}
+                <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    {% else %}
+        <p>No articles found in other categories.</p>
+    {% endif %}
+
+    <p><a href="{% url 'blog:article-create' %}">Create New Article</a></p>
 {% endblock %}
