@@ -92,7 +92,7 @@ class ItemDetailView(DetailView):
                 
                 return redirect('merchstore:cart-list')
             else:
-                return self.get(request, *args, **kwargs) #refresh the page
+                return self.get(request, *args, **kwargs) # refresh the page
 
 def add_item(request):
     form = ProductForm()
