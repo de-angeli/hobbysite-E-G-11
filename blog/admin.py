@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ArticleCategory, Article
+from .models import ArticleCategory, Article, Comment
 
 
 class ArticleCategoryAdmin(admin.ModelAdmin):
@@ -13,5 +13,12 @@ class ArticleAdmin(admin.ModelAdmin):
     list_filter = ('category',)
     search_fields = ('title', 'entry')
 
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('article', 'author', 'created_on')
+    list_filter = ('created_on', 'article')
+    search_fields = ('entry', 'author__user__username')
+
 admin.site.register(ArticleCategory, ArticleCategoryAdmin)
 admin.site.register(Article, ArticleAdmin)
+admin.site.register(Comment, CommentAdmin)
