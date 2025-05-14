@@ -1,20 +1,38 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Wiki Articles{% endblock %}
-
+{% block title %}Article List{% endblock %}
 {% block content %}
     <h1>Wiki Articles</h1>
-    <ul>
-    {% for article in object_list %}
-        <li>
-            <a href="{% url 'wiki:article-detail' article.id %}">{{ article.title }}</a>
-            <p>Category: {{ article.category.name }}</p>  
-            <p>Created on: {{ article.created_on }}</p>
-        </li>
-    {% empty %}
-        <p>No articles found.</p>
-    {% endfor %}
-    </ul>
+
+    <p><a href="{% url 'wiki:article-create' %}">+ Create a new article</a></p>
+
+    {% if user.is_authenticated %}
+        <h2>Your Articles</h2>
+        {% if your_articles %}
+            <ul>
+                {% for a in your_articles %}
+                    <li>
+                        <a href="{{ a.get_absolute_url }}">{{ a.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You haven’t written any articles yet.</p>
+        {% endif %}
+    {% endif %}
+
+    <h2>All Articles</h2>
+    {% if all_articles_by_category %}
+        {% for category, articles in all_articles_by_category.items %}
+            <h3>{{ category.name }}</h3>
+            <ul>
+                {% for a in articles %}
+                    <li><a href="{{ a.get_absolute_url }}">{{ a.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    {% else %}
+        <p>No articles available.</p>
+    {% endif %}
 {% endblock %}

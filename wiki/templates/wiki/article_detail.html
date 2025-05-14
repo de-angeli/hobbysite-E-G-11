@@ -1,13 +1,56 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block title %}{{ object.title }}{% endblock %}
-
 {% block content %}
-    <h1>{{ object.title }}</h1>
-    <p><strong>Category:</strong> {{ object.category }}</p>
-    <p>{{ object.entry }}</p>
-    <p><strong>Created on:</strong> {{ object.created_on }}</p>
-    <p><strong>Last updated:</strong> {{ object.updated_on }}</p>
+	<h1>{{ object.title }}</h1>
+	<p><strong>Category:</strong> {{ object.category.name }}</p>
+	<p><strong>Published On:</strong> {{ object.created_on|date:"Y-m-d" }}</p>
+	<p><strong>Updated On:</strong> {{ object.updated_on|date:"Y-m-d" }}</p>
+
+	{% if object.header_image %}
+    	<img src="{{ object.header_image.url }}"
+         	 alt="{{ object.title }} header"
+         	 style="max-width:100%; height:auto;">
+  	{% endif %}
+
+  	<div>{{ object.entry|linebreaks }}</div>
+
+  	<h2>Read More</h2>
+  	<ul>
+    	{% for art in read_more %}
+      		<li><a href="{{ art.get_absolute_url }}">{{ art.title }}</a></li>
+    	{% empty %}
+      		<li>No related articles.</li>
+    	{% endfor %}
+  	</ul>
+
+  	<h2>Comments</h2>
+  	<ul>
+    	{% for comment in comments %}
+      		<li>
+        		<strong>{{ comment.author }}</strong>:
+        		{{ comment.entry }} 
+        		({{ comment.created_on|date:"Y-m-d H:i" }})
+      		</li>
+    	{% empty %}
+      		<li>No comments yet.</li>
+    	{% endfor %}
+  	</ul>
+
+  	{% if user.is_authenticated %}
+    	<form method="post">
+      		{% csrf_token %}
+      		{{ comment_form.as_p }}
+      		<button type="submit">Add Comment</button>
+    	</form>
+  	{% else %}
+    	<p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add a comment.</p>
+  	{% endif %}
+
+  	{% if user.is_authenticated and object.author == user.profile %}
+    	<p><a href="{% url 'wiki:article-update' object.pk %}">Edit Article</a></p>
+  	{% endif %}
+
+  	<p><a href="{% url 'wiki:article-list' %}">Back to Articles</a></p>
 {% endblock %}
