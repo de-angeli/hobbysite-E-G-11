@@ -34,12 +34,18 @@ class ArticleListView(LoginRequiredMixin, ListView):
         other_articles = defaultdict(list)
         for category, articles in categorized_articles.items():
             for article in articles:
-                if article.author != user_profile:  # Add to "All Other Articles"
+                if article.author and article.author.id != user_profile.id:  # Add to "All Other Articles"
                     other_articles[category].append(article)
 
         # Pass the grouped articles and the user's articles to the template
         context['user_articles'] = user_articles
-        context['other_articles'] = other_articles
+        context['other_articles'] = dict(other_articles)
+
+        print("User profile:", user_profile)
+        print("All articles count:", len(context['all_articles']))
+        print("User articles count:", user_articles.count())
+        for category, articles in other_articles.items():
+            print(f"Category: {category} has {len(articles)} other articles")
 
         return context
 
