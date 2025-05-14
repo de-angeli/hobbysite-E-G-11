@@ -1,0 +1,14 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+nav {
+    background-color: #333;
+    padding: 10px;
+}
+
+nav a {
+    color: white;
+    margin-right: 10px;
+    text-decoration: none;
+}
