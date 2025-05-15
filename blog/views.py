@@ -21,7 +21,12 @@ class ArticleListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user_profile = Profile.objects.get(user=self.request.user)
         context['user_articles'] = Article.objects.filter(author=user_profile)
-        context['categories'] = ArticleCategory.objects.all()
+        
+        other_articles = {}
+        for category in ArticleCategory.objects.all():
+            articles = Article.objects.filter(category=category).exclude(author=user_profile)
+            other_articles[category] = articles
+        context['other_articles'] = other_articles
         return context
 
 class ArticleDetailView(DetailView):
