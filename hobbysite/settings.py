@@ -101,7 +101,7 @@ db_info = urlparse(DATABASE_URL)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': str(BASE_DIR / 'db'),
+        'NAME': db_info.path[1:],
         'USER': db_info.username,
         'PASSWORD': db_info.password,
         'HOST': db_info.hostname,
