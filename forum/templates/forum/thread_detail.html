@@ -4,52 +4,124 @@
 
 {% block title %} {{ object.title }} {% endblock %}
 
+{% block styles %}
+<style>
+	.content {
+		display: flex;
+		justify-content: center;
+		align-items: stretch;
+		gap: 20px;
+		margin: 20px;
+		margin-left: 200px;
+		margin-right: 200px;
+	}
+
+	.image-container img {
+		display: block;
+		max-width: 100%;
+		height: auto;
+		border: 3px solid #67c1df;
+	}
+
+	.image-container {
+		flex-shrink: 0;
+	}
+
+	.description-box {
+		border: 3px solid #67c1df;
+		padding: 20px;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		width: 100%;
+	}
+
+	.description-box p,
+	.description-box div {
+		color: #2796c7;
+		margin-bottom: 10px;
+	}
+
+	.more-details {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		border: 3px solid #67c1df;
+		margin: 20px;
+		padding: 20px;
+		box-sizing: border-box;
+		margin-left: 200px;
+		margin-right: 200px;
+	}
+
+	.more-details > div {
+		flex: 1;
+		margin: 0 10px;
+	}
+
+	.bottom {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		justify-content: center;
+		margin-top: 30px;
+	}
+</style>
+{% endblock %}
+
 {% block content %}
     <h1>{{ object.title }}</h1>
-    <p><strong>Category:</strong> {{ object.category }}</p>
-    <p><strong>Published On:</strong> {{ object.created_on }}</p>
-    <p><strong>Updated On:</strong> {{ object.updated_on }}</p>
-    <p>{{ object.entry }}</p>
-
-    {% if object.image %}
-        <img src="{{ object.image.url }}" alt="Thread Image">
-    {% endif %}
-
-    <h2>Comments</h2>
-    <ul>
-        {% for comment in comments %}
-            <li><strong>{{ comment.author }}</strong>: {{ comment.entry }} ({{ comment.created_on }})</li>
-        {% empty %}
-            <li>No comments yet.</li>
-        {% endfor %}
-    </ul>
-
-    {% if user.is_authenticated %}
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-success">Add Comment</button>
-        </form>
-    {% else %}
-        <p><a href="{% url 'login' %}">Log in</a> to add a comment.</p>
-    {% endif %}
-
+    <div class="content">
+        <div class="description-box">
+            <p><strong>Category:</strong> {{ object.category }}</p>
+            <p><strong>Published On:</strong> {{ object.created_on }}</p>
+            <p><strong>Updated On:</strong> {{ object.updated_on }}</p>
+            <p>{{ object.entry }}</p>
+        </div>
+        <div class="image-container">
+            {% if object.image %}
+                <img src="{{ object.image.url }}" alt="Thread Image">
+            {% endif %}
+        </div>
+    </div>
+        <div class="more-details">
+            <div>
+            <h2>Comments</h2>
+                <ul>
+                    {% for comment in comments %}
+                        <li><strong>{{ comment.author }}</strong>: {{ comment.entry }} ({{ comment.created_on }})</li>
+                    {% empty %}
+                        <li>No comments yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                {% if user.is_authenticated %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-success">Add Comment</button>
+                    </form>
+                {% else %}
+                    <p><a href="{% url 'login' %}">Log in</a> to add a comment.</p>
+                {% endif %}
+            </div>
+            <div>
+                <h3>Related Threads</h3>
+                <ul>
+                    {% for post in related_posts %}
+                        <li><a href="{% url 'forum:thread-detail' post.pk %}">{{ post.title }}</a></li>
+                    {% empty %}
+                        <li>No related threads found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     {% if user.is_authenticated and object.author == user.profile %}
-        <a href="{% url 'forum:thread-update' object.pk %}">Edit Thread</a>
+        <a style="text-decoration: underline;" href="{% url 'forum:thread-update' object.pk %}">Edit Thread</a>
     {% endif %}
 
-    <h3>Related Threads</h3>
-    <ul>
-        {% for thread in related_threads %}
-            <li><a href="{% url 'forum:thread-detail' thread.pk %}">{{ thread.title }}</a></li>
-        {% empty %}
-            <li>No related threads found.</li>
-        {% endfor %}
-    </ul>
-
-    {% if user.is_authenticated and object.author == user.profile %}
-        <a href="{% url 'forum:thread-update' object.pk %}">Edit Thread</a>
-    {% endif %}
-
-    <a href="{% url 'forum:thread-list' %}">Back to Posts</a>
+    <a style="text-decoration: underline;" href="{% url 'forum:thread-list' %}">Back to Posts</a>
 {% endblock %}

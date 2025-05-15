@@ -6,7 +6,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Product, ProductType, Transaction
 from .forms import ProductForm, TransactionForm
 
-
 class ItemListView(ListView):
     model = Product
     template_name = 'merchstore/item_list.html'
@@ -26,8 +25,7 @@ class ItemListView(ListView):
         context['user_products'] = user_products
         context['all_products'] = other_products
         return context
-
-
+    
 class CartListView(LoginRequiredMixin, ListView):
     model = Transaction
     template_name = 'merchstore/cart_list.html'
@@ -36,11 +34,10 @@ class CartListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
 
         profile = self.request.user.profile
-        user_cart_products = Transaction.objects.filter(buyer=profile).select_related('product__owner__user').order_by('product__owner__user__username', 'created_on')
+        user_cart_products = Transaction.objects.filter(buyer=profile).order_by('product__owner__user__username', 'created_on')
 
         context['user_cart_products'] = user_cart_products
         return context
-
         
 class TransactionListView(LoginRequiredMixin, ListView):
     model = Transaction
@@ -50,10 +47,9 @@ class TransactionListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         
         profile = self.request.user.profile
-        transactions = Transaction.objects.filter(product__owner=profile).select_related('buyer__user', 'product').order_by('buyer__user__username', 'created_on')
+        transactions = Transaction.objects.filter(product__owner=profile).order_by('buyer__user__username', 'created_on')
         context['transactions'] = transactions
         return context
-
 
 class ItemDetailView(DetailView):
     model = Product
@@ -71,7 +67,7 @@ class ItemDetailView(DetailView):
         return context
     
     def post(self, request, *args, **kwargs):
-        product = self.get_object()
+        product = self.get_object()  # Get current product
         form = TransactionForm(request.POST, request.FILES)
 
         if not request.user.is_authenticated:
@@ -92,7 +88,7 @@ class ItemDetailView(DetailView):
                 
                 return redirect('merchstore:cart-list')
             else:
-                return self.get(request, *args, **kwargs) # refresh the page
+                return self.get(request, *args, **kwargs) #refresh the page
 
 def add_item(request):
     form = ProductForm()
@@ -109,7 +105,8 @@ def add_item(request):
             p.status = form.cleaned_data.get('status')
             p.owner = request.user.profile
 
-            if int(p.stock) == 0:
+            if int(p.stock) <= 0:
+                p.stock = 0
                 p.status = 'Out of Stock'
             else:
                 p.status = 'Available'
@@ -128,7 +125,8 @@ def update_item(request, pk):
     form = ProductForm(request.POST or None, instance=product)
     
     if form.is_valid():
-        if int(product.stock) == 0:
+        if int(product.stock) <= 0:
+                product.stock = 0
                 product.status = 'Out of Stock'
         else:
                 product.status = 'Available'

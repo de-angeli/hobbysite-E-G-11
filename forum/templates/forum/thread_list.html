@@ -6,32 +6,38 @@
 {% block content %}
     <h1>Forum</h1>
 
-    {% if user.is_authenticated %}
-      <a href="{% url 'forum:thread-create' %}" class="btn btn-primary">Create a new thread</a>
+      {% if user.is_authenticated %}
+        <a style="text-decoration: underline;" href="{% url 'forum:thread-create' %}" class="btn btn-primary">Create a new thread</a>
+        <div class="division">
+          <div class="inner-division">
+            <h2>Your Threads</h2>
+            <ul>
+              {% for thread in user_threads %}
+                <li class="existing">
+                  <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
+                  ({{ thread.created_on|date:"Y-m-d" }})
+                </li>
+              {% empty %}
+                <li>You have not created any threads yet.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
 
-      <h2>Your Threads</h2>
-      <ul>
-        {% for thread in user_threads %}
-          <li>
-            <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
-          </li>
-        {% empty %}
-          <li>You have not created any threads yet.</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-
-    <h2>All Threads by Category</h2>
-    {% for category in categories %}
-      <h3>{{ category.name }}</h3>
-      <ul>
-        {% for thread in category.filtered_threads %}
-          <li>
-            <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
-          </li>
-        {% empty %}
-          <li>No threads in this category.</li>
-        {% endfor %}
-      </ul>
-    {% endfor %}
+        <div class="inner-division">
+          <h2>All Threads by Category</h2>
+          {% for category in categories %}
+            <h3>{{ category.name }}</h3>
+            <ul>
+              {% for thread in category.filtered_posts %}
+                <li class="existing">
+                  <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a> by {{ thread.author }}
+                </li>
+              {% empty %}
+                <li>No threads in this category.</li>
+              {% endfor %}
+            </ul>
+          {% endfor %}
+        </div>
+      </div>
 {% endblock %}

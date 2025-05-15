@@ -1,56 +1,139 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
 {% block title %}{{ object.title }}{% endblock %}
+
+{% block styles %}
+<style>
+	.content {
+		display: flex;
+		justify-content: center;
+		align-items: stretch;
+		gap: 20px;
+		margin: 20px;
+		margin-left: 200px;
+		margin-right: 200px;
+	}
+
+	.image-container img {
+		display: block;
+		max-width: 100%;
+		height: auto;
+		border: 3px solid #67c1df;
+	}
+
+	.image-container {
+		flex-shrink: 0;
+	}
+
+	.description-box {
+		border: 3px solid #67c1df;
+		padding: 20px;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		width: 100%;
+	}
+
+	.description-box p,
+	.description-box div {
+		color: #2796c7;
+		margin-bottom: 10px;
+	}
+
+	.more-details {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		border: 3px solid #67c1df;
+		margin: 20px;
+		padding: 20px;
+		box-sizing: border-box;
+		margin-left: 200px;
+		margin-right: 200px;
+	}
+
+	.more-details > div {
+		flex: 1;
+		margin: 0 10px;
+	}
+
+	.bottom {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		justify-content: center;
+		margin-top: 30px;
+	}
+</style>
+{% endblock %}
+
 {% block content %}
 	<h1>{{ object.title }}</h1>
-	<p><strong>Category:</strong> {{ object.category.name }}</p>
-	<p><strong>Published On:</strong> {{ object.created_on|date:"Y-m-d" }}</p>
-	<p><strong>Updated On:</strong> {{ object.updated_on|date:"Y-m-d" }}</p>
+	<div class="content">
+		<div class="image-container">
+			{% if object.header_image %}
+				<img src="{{ object.header_image.url }}"
+					alt="{{ object.title }} header"
+					style="max-width:100%; height:auto;">
+			{% endif %}
+		</div>
 
-	{% if object.header_image %}
-    	<img src="{{ object.header_image.url }}"
-         	 alt="{{ object.title }} header"
-         	 style="max-width:100%; height:auto;">
-  	{% endif %}
+		<div class="description-box" style="border: solid 3px; border-color: #67c1df;">
+			<p><strong>Category:</strong> {{ object.category.name }}</p>
+			<p><strong>Published On:</strong> {{ object.created_on|date:"Y-m-d" }}</p>
+			<p><strong>Updated On:</strong> {{ object.updated_on|date:"Y-m-d" }}</p>
+			<div>{{ object.entry|linebreaks }}</div>
+		</div>
+	</div>
 
-  	<div>{{ object.entry|linebreaks }}</div>
+	<div class="more-details" style="border: solid 3px; border-color: #67c1df;">
+		<div>
+			<h2>Read More</h2>
+			<ul>
+			{% for art in read_more %}
+				<li><a href="{{ art.get_absolute_url }}">{{ art.title }}</a></li>
+			{% empty %}
+				<li>No related articles.</li>
+			{% endfor %}
+			</ul>
+		</div>
+		<div>
+			<h2>Comments</h2>
+			<ul>
+			{% for comment in comments %}
+				<li>
+					<strong>{{ comment.author }}</strong>:
+					{{ comment.entry }} 
+					({{ comment.created_on|date:"Y-m-d H:i" }})
+				</li>
+			{% empty %}
+				<li>No comments yet.</li>
+			{% endfor %}
+			</ul>
+		</div>
 
-  	<h2>Read More</h2>
-  	<ul>
-    	{% for art in read_more %}
-      		<li><a href="{{ art.get_absolute_url }}">{{ art.title }}</a></li>
-    	{% empty %}
-      		<li>No related articles.</li>
-    	{% endfor %}
-  	</ul>
+		<div>
+			{% if user.is_authenticated %}
+			<form method="post">
+				{% csrf_token %}
+				{{ comment_form.as_p }}
+				<button type="submit">Add Comment</button>
+			</form>
+			{% else %}
+				<p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add a comment.</p>
+			{% endif %}
+		</div>
+	</div>
+	
+	<div class="bottom">
+		{% if user.is_authenticated and object.author == user.profile %}
+			<p style="text-decoration: underline;"><a href="{% url 'wiki:article-update' object.pk %}">Edit Article</a></p>
+		{% endif %}
 
-  	<h2>Comments</h2>
-  	<ul>
-    	{% for comment in comments %}
-      		<li>
-        		<strong>{{ comment.author }}</strong>:
-        		{{ comment.entry }} 
-        		({{ comment.created_on|date:"Y-m-d H:i" }})
-      		</li>
-    	{% empty %}
-      		<li>No comments yet.</li>
-    	{% endfor %}
-  	</ul>
-
-  	{% if user.is_authenticated %}
-    	<form method="post">
-      		{% csrf_token %}
-      		{{ comment_form.as_p }}
-      		<button type="submit">Add Comment</button>
-    	</form>
-  	{% else %}
-    	<p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add a comment.</p>
-  	{% endif %}
-
-  	{% if user.is_authenticated and object.author == user.profile %}
-    	<p><a href="{% url 'wiki:article-update' object.pk %}">Edit Article</a></p>
-  	{% endif %}
-
-  	<p><a href="{% url 'wiki:article-list' %}">Back to Articles</a></p>
+		<p style="text-decoration: underline;"><a href="{% url 'wiki:article-list' %}">Back to Articles</a></p>
+	</div>
 {% endblock %}
