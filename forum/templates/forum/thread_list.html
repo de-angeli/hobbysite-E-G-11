@@ -3,7 +3,6 @@
 {% load static %}
 
 {% block title %}Thread List{% endblock %}
-
 {% block content %}
     <h1>Forum</h1>
 
@@ -15,7 +14,6 @@
         {% for thread in user_threads %}
           <li>
             <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
-            ({{ thread.created_on|date:"Y-m-d" }})
           </li>
         {% empty %}
           <li>You have not created any threads yet.</li>
@@ -27,9 +25,9 @@
     {% for category in categories %}
       <h3>{{ category.name }}</h3>
       <ul>
-        {% for thread in category.filtered_posts %}
+        {% for thread in category.filtered_threads %}
           <li>
-            <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a> by {{ thread.author }}
+            <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
           </li>
         {% empty %}
           <li>No threads in this category.</li>

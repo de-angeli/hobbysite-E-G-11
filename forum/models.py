@@ -8,8 +8,8 @@ class ThreadCategory(models.Model):
     description = models.TextField()
 
     class Meta:
-        verbose_name = "Post Category"
-        verbose_name_plural = "Post Categories"
+        verbose_name = "Thread Category"
+        verbose_name_plural = "Thread Categories"
         ordering = ["name"]
 
     def __str__(self):
@@ -28,7 +28,7 @@ class Thread(models.Model):
         ThreadCategory,
         on_delete=models.SET_NULL,
         null=True,
-        related_name='posts'
+        related_name='threads'
     )
     entry = models.TextField()
     image = models.ImageField(upload_to='images/', null=True, blank=True)
@@ -55,8 +55,7 @@ class Comment(models.Model):
     thread = models.ForeignKey(
         Thread,
         on_delete=models.CASCADE,
-        null=True,
-        related_name='comment'
+        related_name='comments'
     )
     entry = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)

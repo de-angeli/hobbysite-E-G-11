@@ -32,7 +32,6 @@ class Article(models.Model):
     )
     header_image = models.ImageField(
         upload_to="wiki_headers/",
-        blank=True,
         null=True
     )
     entry = models.TextField()

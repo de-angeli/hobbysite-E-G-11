@@ -16,7 +16,7 @@ class ThreadListView(ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['categories'] = ThreadCategory.objects.prefetch_related('posts')
+        ctx['categories'] = ThreadCategory.objects.prefetch_related('threads')
 
         user = self.request.user
 
@@ -24,10 +24,10 @@ class ThreadListView(ListView):
             ctx['user_threads'] = Thread.objects.filter(author=user.profile)
             # exclude user's threads from the main categories
             for category in ctx['categories']:
-                category.filtered_posts = category.posts.exclude(author=user.profile)
+                category.filtered_threads = category.threads.exclude(author=user.profile)
         else:
             for category in ctx['categories']:
-                category.filtered_posts = category.posts.all()
+                category.filtered_threads = category.threads.all()
         return ctx
 
 
@@ -40,15 +40,20 @@ class ThreadDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        thread = self.object
 
         if self.request.user.is_authenticated:
             ctx['form'] = CommentForm()
+            profile = getattr(self.request.user, 'profile', None)
+            ctx['can_edit'] = (thread.author == profile) if profile else False
+        else:
+            ctx['can_edit'] = False
 
-        ctx['comments'] = self. object.comment.order_by('created_on')
-        ctx['related_posts'] = Thread.objects.filter(
+        ctx['comments'] = self.object.comments.order_by('created_on')
+        ctx['related_threads'] = Thread.objects.filter(
             category=self.object.category
         ).exclude(pk=self.object.pk)[:2]
-        ctx['categories'] = ThreadCategory.objects.prefetch_related('posts')
+        ctx['categories'] = ThreadCategory.objects.prefetch_related('threads')
 
         return ctx
 
@@ -74,7 +79,6 @@ class ThreadCreateView(LoginRequiredMixin, CreateView):
     form_class = ThreadForm
 
     def post(self, request, *args, **kwargs):
-        form = self.get_form()
         form = ThreadForm(request.POST, request.FILES)
         if form.is_valid():
             thread = form.save(commit=False)

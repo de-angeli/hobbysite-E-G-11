@@ -61,7 +61,7 @@ class ArticleDetailView(DetailView):
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model         = Article
     form_class    = ArticleForm
-    template_name = 'wiki/article_form.html'
+    template_name = 'wiki/article_create.html'
 
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
@@ -71,7 +71,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
 class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     model         = Article
     form_class    = ArticleForm
-    template_name = 'wiki/article_form.html'
+    template_name = 'wiki/article_update.html'
 
     def get_queryset(self):
         return Article.objects.filter(author=self.request.user.profile)
