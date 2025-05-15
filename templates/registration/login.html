@@ -17,6 +17,7 @@
         <button type="submit">Login</button>
     </form><br>
     <a href="{% url 'password_reset' %}">Forgot Password</a><br>
+    <p>Don't have an account? <a href="{% url 'accounts:register' %}">Sign up here!</a></p>
 {% endblock %}
 
 {% block auth_links %}{% endblock %}
