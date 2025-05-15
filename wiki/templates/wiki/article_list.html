@@ -10,6 +10,7 @@
         <div class="inner-division">
             <h2>Your Articles</h2>
             {% if your_articles %}
+            <div class="list-detail">
                 <ul>
                     {% for a in your_articles %}
                         <li class="existing">
@@ -20,11 +21,13 @@
             {% else %}
                 <p>You haven’t written any articles yet.</p>
             {% endif %}
+            </div>
         </div>
         {% endif %}
 
         <div class="inner-division">
             <h2>All Articles</h2>
+            <div class="list-detail">
             {% if all_articles_by_category %}
                 {% for category, articles in all_articles_by_category.items %}
                     <h3>{{ category.name }}</h3>
@@ -37,7 +40,8 @@
             {% else %}
                 <p>No articles available.</p>
             {% endif %}
+            </div>
         </div>
     </div>
-    <p><a href="{% url 'wiki:article-create' %}">+ Create a new article</a></p>
+    <p class="create"><a href="{% url 'wiki:article-create' %}">+ Create a new article</a></p>
 {% endblock %}
