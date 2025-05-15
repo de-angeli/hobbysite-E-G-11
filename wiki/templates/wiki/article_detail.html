@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
 {% block title %}{{ object.title }}{% endblock %}
@@ -18,32 +19,32 @@
 
   	<h2>Read More</h2>
   	<ul>
-    	{% for art in read_more %}
-      		<li><a href="{{ art.get_absolute_url }}">{{ art.title }}</a></li>
-    	{% empty %}
-      		<li>No related articles.</li>
-    	{% endfor %}
+    {% for art in read_more %}
+      	<li><a href="{{ art.get_absolute_url }}">{{ art.title }}</a></li>
+    {% empty %}
+      	<li>No related articles.</li>
+    {% endfor %}
   	</ul>
 
   	<h2>Comments</h2>
   	<ul>
-    	{% for comment in comments %}
-      		<li>
-        		<strong>{{ comment.author }}</strong>:
-        		{{ comment.entry }} 
-        		({{ comment.created_on|date:"Y-m-d H:i" }})
-      		</li>
-    	{% empty %}
-      		<li>No comments yet.</li>
-    	{% endfor %}
+    {% for comment in comments %}
+      	<li>
+        	<strong>{{ comment.author }}</strong>:
+        	{{ comment.entry }} 
+        	({{ comment.created_on|date:"Y-m-d H:i" }})
+      	</li>
+    {% empty %}
+    	<li>No comments yet.</li>
+    {% endfor %}
   	</ul>
 
   	{% if user.is_authenticated %}
-    	<form method="post">
-      		{% csrf_token %}
-      		{{ comment_form.as_p }}
-      		<button type="submit">Add Comment</button>
-    	</form>
+    <form method="post">
+      	{% csrf_token %}
+    	{{ comment_form.as_p }}
+      	<button type="submit">Add Comment</button>
+    </form>
   	{% else %}
     	<p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add a comment.</p>
   	{% endif %}
