@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
 {% block title %}Item List{% endblock %}
@@ -7,32 +8,37 @@
     <h1>Merchandise Store</h1>
 
     {% if user_products %}
-        <h2>Your Products</h2>
-        <ul>
-        {% for item in user_products %}
-            <li>
-                [{{ item.product_type }}]
-                <a href="{{ item.get_absolute_url }}">
-                    {{ item.name }} 
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>You have no products listed.</p>
-    {% endif %}
+    <div class="division">
+        <div class="inner-division">
+            <h2>Your Products</h2>
+            <ul>
+            {% for item in user_products %}
+                <li class="existing">
+                    [{{ item.product_type }}]
+                    <a href="{{ item.get_absolute_url }}">
+                        {{ item.name }} 
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have no products listed.</p>
+        {% endif %}
+        </div>
 
-    <h2>All Other Products</h2>
-    <ul>
-    {% for item in all_products %}
-        <li>
-            [{{ item.product_type }}]
-            <a href="{{ item.get_absolute_url }}">
-                {{ item.name }} 
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
-
+        <div class="inner-division">
+            <h2>All Other Products</h2>
+            <ul>
+            {% for item in all_products %}
+                <li class="existing">
+                    [{{ item.product_type }}]
+                    <a href="{{ item.get_absolute_url }}">
+                        {{ item.name }} 
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
     <a href="{% url 'merchstore:item-add' %}">+ Add New Product</a>
 {% endblock %}

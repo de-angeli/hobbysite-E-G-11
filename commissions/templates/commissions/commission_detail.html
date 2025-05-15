@@ -3,39 +3,81 @@
 {% load static %}
 
 {% block title %} {{ object.title }} {% endblock %}
+
+{% block styles %}
+<style>
+    .content {
+		display: flex;
+		justify-content: center;
+		align-items: stretch;
+		gap: 20px;
+		margin: 20px;
+		margin-left: 200px;
+		margin-right: 200px;
+	}
+    .description-box {
+        flex: 1;
+		border: 3px solid #67c1df;
+        background-color: #67c1df2d;
+		padding: 20px;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		width: 100%;
+	}
+    .jobs {
+        display: flex;
+		justify-content: center;
+		align-items: stretch;
+		gap: 20px;
+		margin: 20px;
+		margin-left: 200px;
+		margin-right: 200px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
     <h1>{{ object.title }}</h1>
-    <p>{{ object.description }}</p>
-    <p>Status: {{ object.status }}</p>
-    <p>Created on: {{ object.created_on }}</p>
-    <p>Updated on: {{ object.updated_on }}</p>
+    <div class="content">
+        <div class="description-box"><p>{{ object.description }}</p></div>
+        <div style="width: max-content;" class="description-box">
+            <p>Status: {{ object.status }}</p>
+            <p>Created on: {{ object.created_on }}</p>
+            <p>Updated on: {{ object.updated_on }}</p>
+        </div>
+    </div>
     
     <h2>Jobs</h2>
     <p>Total Manpower required: {{ total_manpower }}</p>
     <p>Open Manpower: {{ open_manpower }}</p>
-    <ul>
-        {% for item in job_info %}
-            <li>
-                <strong>{{ item.job.role }}</strong> ({{ item.job.status }})<br>
-                Required: {{ item.job.manpower_required }}, Open Slots: {{ item.available_slots }}
-                {% if item.own_commission %}
-                    <p>You cannot apply to your own commission</p>
-                {% elif item.can_apply %}
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <input type="hidden" name="job" value="{{ item.job.id }}">
-                        <button type="submit">Apply to Job</button>
-                    </form>
-                {% elif user.is_authenticated %}
-                    <p>Job is full</p>    
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+        <ul>
+            <div class="jobs">
+            {% for item in job_info %}
+                <li style="border: 3px solid #67c1df;
+		padding: 10px; border-radius: 10px;">
+                    <strong>{{ item.job.role }}</strong> ({{ item.job.status }})<br>
+                    Required: {{ item.job.manpower_required }}, Open Slots: {{ item.available_slots }}
+                    {% if item.own_commission %}
+                        <p>You cannot apply to your own commission</p>
+                    {% elif item.can_apply %}
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <input type="hidden" name="job" value="{{ item.job.id }}">
+                            <button type="submit">Apply to Job</button>
+                        </form>
+                    {% elif user.is_authenticated %}
+                        <p>Job is full</p>    
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </div>
+        </ul>
 
     {% if object.author == user.profile %}
-        <a href="{% url 'commissions:commission-update' object.pk %}">Edit Commission</a>
+        <a style="text-decoration: underline;" href="{% url 'commissions:commission-update' object.pk %}">Edit Commission</a>
     {% endif %}
-    <a href="{% url 'commissions:commission-list' %}">Back to list</a>
+    <a style="text-decoration: underline;" href="{% url 'commissions:commission-list' %}">Back to list</a>
 {% endblock %}

@@ -3,26 +3,53 @@
 {% load static %}
 
 {% block title %} {{ object.name }} {% endblock %}
+
+{% block styles %}
+<style>
+    .division {
+        display: flex;
+        flex-direction: column;
+        margin-left: 200px;
+        margin-right: 200px;
+        align-items: center;
+    }
+    .details {
+        display: flex;
+        padding: 10px;
+    }
+    .details p {
+        flex: content;
+        width: auto;
+        padding: 10px;
+        border: 3px solid #67c1df;
+    }
+</style>
+{% endblock %}
+
 {% block content %} 
     <h1>Merchandise Store</h1>
-    <h2>{{ object.name }} by {{object.owner}}</h2>
-    <p>{{ object.description }}</p>
-    <p>Php {{ object.price }}</p>
-    <p>{{ object.status }}</p>
-    <p>In Stock: {{ object.stock }}</p>
+    <div class="division">
+        <h2>{{ object.name }} by {{object.owner}}</h2>
+        <p style="border:3px solid #67c1df; padding: 30px; width: 300px;">{{ object.description }}</p>
+        <div class="details">
+            <p>Php {{ object.price }}</p>
+            <p>{{ object.status }}</p>
+            <p>In Stock: {{ object.stock }}</p>
+        </div>
 
-    {% if request.user.is_authenticated and object in user_products %}
-        <a href="{% url 'merchstore:item-edit' object.pk %}">+ Edit Product</a>
-    {% else %}
-        {% if object.stock > 0 %}
-            <h2>Buy Now!</h2>
-            <form method="POST" enctype="multipart/form-data"> 
-                {% csrf_token %}
-                {{ form }}
-                <button type="submit">Submit!</button>
-            </form>
+        {% if request.user.is_authenticated and object in user_products %}
+            <a style="text-decoration: underline;" href="{% url 'merchstore:item-edit' object.pk %}">+ Edit Product</a>
         {% else %}
-            <h2>Item out of stock. Please check in in a later time</h2>
+            {% if object.stock > 0 %}
+                <h2>Buy Now!</h2>
+                <form method="POST" enctype="multipart/form-data"> 
+                    {% csrf_token %}
+                    {{ form }}
+                    <button style="margin: 10px;" type="submit">Submit!</button>
+                </form>
+            {% else %}
+                <h2>Item out of stock. Please check in in a later time</h2>
+            {% endif %}
         {% endif %}
-    {% endif %}
+    </div>
 {% endblock %}

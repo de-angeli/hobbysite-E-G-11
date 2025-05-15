@@ -76,7 +76,6 @@ h1 {
 footer {
     background-color: #67c1df;
     padding: 20px;
-    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -95,4 +94,12 @@ footer {
 
 .create {
     text-decoration: underline;
+}
+
+img {
+    max-height: 300px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
 }
