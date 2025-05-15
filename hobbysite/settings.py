@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['django-hobbysite-9ckz4.ondigitalocean.app/']
 
 
 # Application definition
@@ -65,7 +65,7 @@ ROOT_URLCONF = 'hobbysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [str(BASE_DIR / 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -146,11 +146,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATICFILES_DIRS = [
-    str(BASE_DIR/'static')
+    BASE_DIR/'static'
 ]
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(str(BASE_DIR), 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
@@ -158,7 +158,7 @@ LOGOUT_REDIRECT_URL = 'login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-MEDIA_ROOT = str(BASE_DIR/'media')
+MEDIA_ROOT = BASE_DIR/'media'
 MEDIA_URL = '/media/'
 
 # Default primary key field type
