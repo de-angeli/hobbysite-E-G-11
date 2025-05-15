@@ -150,7 +150,7 @@ STATICFILES_DIRS = [
 ]
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(str(BASE_DIR, 'staticfiles'))
+STATIC_ROOT = os.path.join(str(BASE_DIR), 'staticfiles')
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
