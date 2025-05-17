@@ -13,7 +13,11 @@ def register_view(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Profile.objects.create(user=user)
+            Profile.objects.create(
+                user=user,
+                display_name=user.username,
+                email=user.email
+            )
             login(request, user)
             return redirect('home')
     else:
