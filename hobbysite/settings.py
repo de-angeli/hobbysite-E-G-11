@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'blog',
     'wiki',
     'user_management',
-    'accounts'
+    'accounts',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -158,10 +159,21 @@ LOGOUT_REDIRECT_URL = 'login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-MEDIA_ROOT = BASE_DIR/'media'
-MEDIA_URL = '/media/'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+if DEBUG:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+else:
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_ACCESS_KEY_ID = os.getenv('SPACES_KEY')
+    AWS_SECRET_ACCESS_KEY = os.getenv('SPACES_SECRET')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('SPACES_BUCKET')
+    AWS_S3_REGION_NAME = os.getenv('SPACES_REGION')
+    AWS_S3_ENDPOINT_URL = f"https://{os.getenv('SPACES_ENDPOINT')}"
+    AWS_DEFAULT_ACL = 'public-read'
+    
+    MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.{os.getenv('SPACES_ENDPOINT')}/"
