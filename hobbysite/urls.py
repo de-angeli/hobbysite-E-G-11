@@ -21,9 +21,10 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from user_management import views as user_views
+from accounts.views import homepage
 
 urlpatterns = [
-    path('', include('accounts.urls')),
+    path('', homepage, name='home'),
 
     path('forum/', include('forum.urls', namespace="forum")),
     path('commissions/', include('commissions.urls', namespace="commissions")),
@@ -32,7 +33,7 @@ urlpatterns = [
     path('wiki/', include('wiki.urls', namespace="wiki")),
 
     path('accounts/', include('django.contrib.auth.urls')),
-    #path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
     path('profile/', include('user_management.urls', namespace="user_management")),
 
     path('admin/', admin.site.urls)
