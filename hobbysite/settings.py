@@ -145,28 +145,32 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-'''
-STATICFILES_DIRS = [
-    BASE_DIR/'static'
-]
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-'''
+if DEBUG:
+    # LOCAL DEVELOPMENT
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [BASE_DIR / 'static']
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Static and Media with DigitalOcean Spaces
-AWS_ACCESS_KEY_ID = os.getenv('SPACES_KEY')
-AWS_SECRET_ACCESS_KEY = os.getenv('SPACES_SECRET')
-AWS_STORAGE_BUCKET_NAME = os.getenv('SPACES_BUCKET')
-AWS_S3_REGION_NAME = os.getenv('SPACES_REGION')
-AWS_S3_ENDPOINT_URL = f"https://{os.getenv('SPACES_ENDPOINT')}"
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{os.getenv('SPACES_ENDPOINT')}"
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+else:
+    # PRODUCTION: DigitalOcean Spaces (S3)
+    AWS_ACCESS_KEY_ID = os.getenv('SPACES_KEY')
+    AWS_SECRET_ACCESS_KEY = os.getenv('SPACES_SECRET')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('SPACES_BUCKET')
+    AWS_S3_REGION_NAME = os.getenv('SPACES_REGION')
+    AWS_S3_ENDPOINT_URL = f"https://{os.getenv('SPACES_ENDPOINT')}"
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{os.getenv('SPACES_ENDPOINT')}"
 
-AWS_LOCATION = 'static'
-STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+    AWS_LOCATION = 'static'
 
-MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
