@@ -148,7 +148,6 @@ USE_TZ = True
 if DEBUG:
     # LOCAL DEVELOPMENT
     STATIC_URL = '/static/'
-    STATICFILES_DIRS = [BASE_DIR / 'static']
     STATIC_ROOT = BASE_DIR / 'staticfiles'
 
     MEDIA_URL = '/media/'
@@ -159,7 +158,7 @@ else:
     AWS_SECRET_ACCESS_KEY = os.getenv('SPACES_SECRET')
     AWS_STORAGE_BUCKET_NAME = os.getenv('SPACES_BUCKET')
     AWS_S3_REGION_NAME = os.getenv('SPACES_REGION')
-    AWS_S3_ENDPOINT_URL = f"https://{os.getenv('SPACES_ENDPOINT')}"
+    AWS_S3_ENDPOINT_URL = 'https://sgp1.digitaloceanspaces.com'
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{os.getenv('SPACES_ENDPOINT')}"
 
     AWS_LOCATION = 'static'
@@ -167,10 +166,11 @@ else:
     AWS_DEFAULT_ACL = 'public-read'
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
 
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_URL = f'https://{AWS_S3_ENDPOINT_URL}/{PUBLIC_MEDIA_LOCATION}/'
+    DEFAULT_FILE_STORAGE = 'hello_django.storage_backends.PublicMediaStorage'
 
-    STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = (BASE_DIR / 'static',)
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
