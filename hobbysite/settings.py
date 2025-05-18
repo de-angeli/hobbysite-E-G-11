@@ -145,22 +145,25 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-USE_SPACES = os.getenv('USE_SPACES') == 'TRUE'
 
-if USE_SPACES:
-    AWS_ACCESS_KEY_ID = os.getenv('SPACES_KEY')
-    AWS_SECRET_ACCESS_KEY = os.getenv('SPACES_SECRET')
-    AWS_STORAGE_BUCKET_NAME = os.getenv('SPACES_BUCKET')
-    AWS_S3_REGION_NAME = os.getenv('SPACES_REGION')
-    AWS_S3_ENDPOINT_URL = 'https://sgp1.digitaloceanspaces.com'
-    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{os.getenv('SPACES_ENDPOINT')}"
+AWS_ACCESS_KEY_ID = os.getenv('SPACES_KEY')
+AWS_SECRET_ACCESS_KEY = os.getenv('SPACES_SECRET')
+AWS_STORAGE_BUCKET_NAME = os.getenv('SPACES_BUCKET')
+AWS_S3_REGION_NAME = os.getenv('SPACES_REGION')
+AWS_S3_ENDPOINT_URL = 'https://sgp1.digitaloceanspaces.com'
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{os.getenv('SPACES_ENDPOINT')}"
 
-    DEFAULT_FILE_STORAGE = 'hobbysite.storages_backends.MediaStorage'
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
-else:
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+
+STORAGES = {
+'default': {
+    'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
+},
+'staticfiles': {
+    'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
+},
+}
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
