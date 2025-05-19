@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'storages',
 ]
 
+'''
 STORAGES = {
     'default': {
         'BACKEND': 'hobbysite.storage_backends.MediaStorage',
@@ -59,6 +60,7 @@ STORAGES = {
         'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
     },
 }
+'''
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -159,6 +161,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR / 'staticfiles')
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+'''
 AWS_ACCESS_KEY_ID = os.getenv('SPACES_KEY')
 AWS_SECRET_ACCESS_KEY = os.getenv('SPACES_SECRET')
 AWS_STORAGE_BUCKET_NAME = os.getenv('SPACES_BUCKET')
@@ -170,10 +173,10 @@ AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{os.getenv('SPACES_ENDPOINT')
 
 PUBLIC_MEDIA_LOCATION = 'media'
 MEDIA_URL = 'https://django-hobbysite.sgp1.digitaloceanspaces.com/media/'
+'''
 
-
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
