@@ -59,7 +59,7 @@ class ThreadDetailView(DetailView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = CommentForm(request.POST, request.FILES)
+        form = CommentForm(request.POST)
 
         if form.is_valid():
             comment = form.save(commit=False)
