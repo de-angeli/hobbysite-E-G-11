@@ -170,6 +170,7 @@ AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{os.getenv('SPACES_ENDPOINT')
 
 PUBLIC_MEDIA_LOCATION = 'media'
 MEDIA_URL = 'https://django-hobbysite.sgp1.digitaloceanspaces.com/media/'
+DEFAULT_FILE_STORAGE = 'hobbysite.storage_backends.MediaStorage'
 
 
 # MEDIA_URL = '/media/'
