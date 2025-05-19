@@ -29,7 +29,7 @@
           {% for category in categories %}
             <h3>{{ category.name }}</h3>
             <ul>
-              {% for thread in category.filtered_posts %}
+              {% for thread in category.filtered_threads %}
                 <li class="existing">
                   <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a> by {{ thread.author }}
                 </li>
