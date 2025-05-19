@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'wiki',
     'user_management',
     'accounts',
-    'storages'
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -145,7 +145,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-
+'''
 AWS_ACCESS_KEY_ID = os.getenv('SPACES_KEY')
 AWS_SECRET_ACCESS_KEY = os.getenv('SPACES_SECRET')
 AWS_STORAGE_BUCKET_NAME = os.getenv('SPACES_BUCKET')
@@ -156,10 +156,13 @@ AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{os.getenv('SPACES_ENDPOINT')
 
 DEFAULT_FILE_STORAGE = 'hobbysite.storages.backends.s3.S3Storage'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
-
+'''
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR / 'staticfiles')
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
