@@ -6,7 +6,7 @@
     <h1>Welcome to the Project Homepage</h1>
 
     {% if user.is_authenticated %}
-        <p>Hello, {{ user.username }}! <a href="{% url 'accounts:logout' %}">Logout</a></p>
+        <p>Hello, {{ user.username }}!</p>
     {% else %}
         <p><a href="{% url 'accounts:login' %}">Login</a> | <a href="{% url 'accounts:register' %}">Register</a></p>
     {% endif %}
@@ -19,5 +19,10 @@
         <li><a href="/wiki/articles/">Wiki</a></li>
         <li><a href="/commissions/list/">Commissions</a></li>
     </ul>
+
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button style="margin: 10px;" type="submit">Logout</button>
+    </form>
 {% endblock %}
 {% block auth_links %}{% endblock %}
