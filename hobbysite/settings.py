@@ -145,7 +145,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Manila'
 
 USE_I18N = True
 
@@ -155,21 +155,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR / 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR / 'static')]
+
 AWS_ACCESS_KEY_ID = os.getenv('SPACES_KEY')
 AWS_SECRET_ACCESS_KEY = os.getenv('SPACES_SECRET')
 AWS_STORAGE_BUCKET_NAME = os.getenv('SPACES_BUCKET')
 AWS_S3_REGION_NAME = os.getenv('SPACES_REGION')
-AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_ENDPOINT_URL = 'https://sgp1.digitaloceanspaces.com'
+AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{os.getenv('SPACES_ENDPOINT')}"
 
 PUBLIC_MEDIA_LOCATION = 'media'
 MEDIA_URL = 'https://django-hobbysite.sgp1.digitaloceanspaces.com/media/'
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
