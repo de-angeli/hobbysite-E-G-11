@@ -58,11 +58,17 @@ class CommissionDetailView(DetailView):
             occupied_slots = job.applications.filter(status="Accepted").count()
             available_slots = job.manpower_required - occupied_slots
             open_manpower += available_slots
+
+            own_commission = (
+                self.request.user.is_authenticated and 
+                job.commission.author == getattr(self.request.user, 'profile', None)
+            )
+
             job_info.append({
                 'job': job,
                 'available_slots': available_slots,
-                'can_apply': self.request.user.is_authenticated and available_slots > 0,
-                'own_commission': job.commission.author == self.request.user.profile
+                'can_apply': self.request.user.is_authenticated and available_slots > 0 and not own_commission,
+                'own_commission': own_commission
             })
 
         ctx['job_info'] = job_info

@@ -193,6 +193,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'jameel.abarico@student.ateneo.edu'
-EMAIL_HOST_PASSWORD = 'xggl gnlk anng ijip'
+EMAIL_HOST_PASSWORD = 'gttt htyp tbdg zsro'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False'''

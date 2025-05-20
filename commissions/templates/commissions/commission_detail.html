@@ -76,8 +76,8 @@
             </div>
         </ul>
 
-    {% if object.author == user.profile %}
-        <a style="text-decoration: underline;" href="{% url 'commissions:commission-update' object.pk %}">Edit Commission</a>
+    {% if user.is_authenticated and object.author == user.profile %}
+        <a href="{% url 'commissions:commission-update' object.pk %}">Edit Commission</a>
     {% endif %}
     <a style="text-decoration: underline;" href="{% url 'commissions:commission-list' %}">Back to list</a>
 {% endblock %}
