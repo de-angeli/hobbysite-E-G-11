@@ -111,7 +111,7 @@
             <div>
                 <h3>Related Threads</h3>
                 <ul>
-                    {% for post in related_posts %}
+                    {% for post in related_threads %}
                         <li><a href="{% url 'forum:thread-detail' post.pk %}">{{ post.title }}</a></li>
                     {% empty %}
                         <li>No related threads found.</li>
